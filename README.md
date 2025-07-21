@@ -1,0 +1,174 @@
+# Bus Boarding Sequence Generator
+
+A Django web application that generates an optimal boarding sequence for bus bookings based on seat proximity to the front entry, minimizing aisle congestion and improving boarding efficiency.
+
+---
+
+## 🚀 Features
+
+- **CSV Upload:** Upload a CSV file of bookings (`Booking_ID,Seats`).
+- **Smart Boarding Sequence:** Generates a boarding order based on seat proximity to the front.
+- **Visual Results:** Displays the sequence in a clean, styled table.
+- **CSV Download:** Download the generated sequence as a CSV.
+- **No Database Required:** All processing is in-memory/session-based.
+- **Bootstrap UI:** Clean, responsive interface (no JavaScript required).
+
+---
+
+## 🛠️ Tech Stack
+
+- **Backend:** Django (latest LTS)
+- **Frontend:** Django Templates, HTML, CSS (Bootstrap)
+- **Language:** Python 3.x
+
+---
+
+## 📦 Project Structure
+
+```
+bus_boarding/           # Django project settings
+boarding/               # Main app: views, forms, templates, static
+  ├── templates/boarding/
+  │     ├── upload.html
+  │     └── result.html
+  ├── static/boarding/
+  │     └── style.css
+  ├── forms.py
+  ├── views.py
+  └── urls.py
+sample_data/
+  ├── example.csv
+  └── test_input.csv
+README.md
+manage.py
+```
+
+---
+
+## ⚡ Quickstart
+
+1. **Clone the repository**
+2. **Install dependencies**:
+   ```bash
+   pip install django
+   ```
+3. **Run migrations** (no DB needed for basic use):
+   ```bash
+   python manage.py migrate
+   ```
+4. **Start the development server**:
+   ```bash
+   python manage.py runserver
+   ```
+5. **Open your browser** and go to [http://localhost:8000/](http://localhost:8000/)
+
+---
+
+## 📥 Usage
+
+1. **Visit the homepage**
+2. **Upload a CSV file** in the format:
+   ```csv
+   Booking_ID,Seats
+   101,A1,B1
+   120,A20,C2
+   102,B2,B3
+   103,A2
+   ```
+3. **View the generated boarding sequence** in a styled table.
+4. **Download the result as a CSV** if desired.
+
+---
+
+## 🧪 Example Input/Output
+
+**Input CSV:**
+```
+Booking_ID,Seats
+101,A1,B1
+120,A20,C2
+102,B2,B3
+103,A2
+```
+
+**Output Table:**
+| Seq | Booking_ID |
+|-----|------------|
+| 1   | 103        |
+| 2   | 101        |
+| 3   | 120        |
+| 4   | 102        |
+
+**Output CSV:**
+```
+Seq,Booking_ID
+1,103
+2,101
+3,120
+4,102
+```
+
+---
+
+## 🧠 Boarding Logic & Constraints
+
+- Passengers board from the front (row A is closest).
+- For bookings with multiple seats, the closest row is used.
+- If two bookings are in the same row, the lower Booking_ID boards first.
+- Bookings with empty seat lists are skipped (with a warning).
+
+### Boarding Logic Illustration
+
+```
++-----------------------------+
+|        Bus Layout          |
++-----------+-----------+----+
+| A20 / B20 |           | C20 / D20 |
+|-----------+-----------+-----------|
+|                                   |
+|                                   |
+|           X                       |
+|           Y        <- If X is standing, Y can't cross
+|                                   |
+|                                   |
+|                                   |
+|                                   |
+| A1  / B1  |           | C1  / D1  |
+|-----------+-----------+-----------|
+|           Entry (Front)          |
++-----------------------------+
+```
+
+**Explanation:**
+- The bus is entered from the front (bottom of the diagram).
+- Rows are labeled A, B, C, D from left to right, and numbered from 1 (front) to 20 (back).
+- Passengers with seats closer to the front (lower row letters, lower numbers) should board first.
+- If a passenger (X) is standing in the aisle, another passenger (Y) behind cannot cross until X is seated.
+- The boarding sequence is designed to minimize aisle congestion and allow smooth boarding from front to back.
+- For bookings with multiple seats, the seat closest to the front determines the boarding order for that booking.
+- If two bookings are in the same row, the one with the lower Booking_ID boards first.
+- Bookings with empty seat lists are skipped (with a warning).
+
+---
+
+## 📁 Sample Data
+
+- `sample_data/example.csv` — Simple example
+- `sample_data/test_input.csv` — Includes multiple seats, same row, empty seat, and different Booking_IDs
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to fork the repo and submit a pull request.
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+**Author:**
+- [Your Name] 

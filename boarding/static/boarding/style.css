@@ -1,0 +1,16 @@
+table {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+thead th {
+    background: #f8f9fa;
+    font-weight: 600;
+}
+tbody tr:hover {
+    background: #f1f3f5;
+}
+td, th {
+    vertical-align: middle !important;
+    text-align: center;
+} 
