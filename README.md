@@ -172,3 +172,14 @@ This project is open source and available under the [MIT License](LICENSE).
 
 **Author:**
 - [Your Name] 
+
+## Render Deployment Notes
+
+- Make sure `gunicorn` is in your requirements.txt (already added).
+- Set your Render start command to:
+
+```
+gunicorn bus_boarding.wsgi:application --bind 0.0.0.0:$PORT
+```
+
+This ensures your Django app binds to the correct port and uses a production-ready WSGI server. 
