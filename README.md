@@ -183,3 +183,19 @@ gunicorn bus_boarding.wsgi:application --bind 0.0.0.0:$PORT
 ```
 
 This ensures your Django app binds to the correct port and uses a production-ready WSGI server. 
+
+## Static Files on Render
+
+- Make sure you have the following in your `bus_boarding/settings.py`:
+  ```python
+  STATIC_URL = '/static/'
+  STATIC_ROOT = BASE_DIR / 'staticfiles'
+  ```
+- In your Render dashboard, set your **Build Command** to:
+  ```
+  pip install -r requirements.txt && python manage.py collectstatic --noinput
+  ```
+- In your Render dashboard, add a **Static Site** or **Static Directory** for `/static` or `/staticfiles` if needed, so Render can serve your static files.
+- In your templates, always use `{% load static %}` and reference static files with `{% static 'boarding/style.css' %}`.
+
+This ensures your CSS/JS (including dark mode) will work in production. 
